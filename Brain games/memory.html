@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+
+	<style type="text/css">
+		
+		#container{
+			position: relative;
+			top: 30px;
+			outline: 2px solid black;
+			font-size: 0;
+			margin: auto;
+			height: 500px;
+			width: 500px;
+			padding: 0;
+			border: none;
+		}
+
+
+		.grid{
+			margin: 0;
+			padding: 0;
+			border: none;
+			outline: 1px solid black;
+			display: inline-block;
+		}
+
+		#button{
+			text-align: center;
+			padding-top: 50px;
+		}
+
+		#lives{
+			text-align: center;
+		}
+
+		#lives img{
+			padding-top: 50px;
+			width: 35px;
+		}
+
+	</style>
+
+</head>
+<body>
+
+
+
+	<div id='lives'>
+		<img id='live_one' src="heart.png">
+		<img id='live_two' src="heart.png">
+		<img id='live_three' src="heart.png">
+	</div>
+
+
+	<div id='container'>
+		
+	</div>
+
+	<div id='button'>
+		<button onclick="onButton()" onclick="second()">Next</button>
+	</div>
+
+	<script type="text/javascript">
+
+
+		var x = 2;
+		var current_arr = [];
+
+		window.onload = function() {
+			current_arr = pattern(x);
+		}
+
+
+		function pattern(x){
+
+			const grid_items = document.querySelectorAll('.grid');
+
+			var min = 2;
+			var max = x * x;
+
+
+
+			var arr = [];
+			for(var i=2; i<parseInt(max*0.5) + x; i++){
+				if (!arr.includes(i)){
+					arr.push(Math.round(Math.random() * i));
+				}
+			}
+
+			var lst = []
+			for(var i = min - 1; i < arr.length; i++){
+				grid_items[arr[i]].style.backgroundColor = 'black';
+				if (!lst.includes(arr[i])){
+					lst.push(arr[i])
+				}
+
+			}
+
+
+			return lst;
+			
+		}	
+
+		
+		function createGrid(x){
+
+				var container = document.getElementById('container');
+
+				for (var rows = 0; rows < x; rows++){
+					for (var columns = 0; columns < x; columns++){
+						var create_div = document.createElement('div');
+						create_div.className = 'grid';
+						container.appendChild(create_div);
+						
+					}
+
+				}
+				var get_grid = document.getElementsByClassName('grid');
+				for(var i = 0; i < get_grid.length; i++) {
+			       if( get_grid[i].textContent == ''){
+			          get_grid[i].style.height = String(500/x) + "px";
+			          get_grid[i].style.width = String(500/x) + "px";
+			       } 
+		    	}
+
+
+		    	const grid_items = document.querySelectorAll('.grid');
+
+
+		    	var lives = 0;
+		    	var temp = ['live_one', 'live_two', 'live_three'];
+		    	var tree = document.getElementById('lives');
+
+
+				grid_items.forEach(item => item.addEventListener('click', () => {
+
+				    item.style.backgroundColor = 'Aqua';
+				    item.style.width = String(500/x) + "px";
+				    item.style.height = String(500/x) + "px";
+				    item.style.transition = '1s';
+					
+					for (var i = 0; i < current_arr.length; i ++){
+						if(grid_items[current_arr[i]] != item){
+							item.style.backgroundColor = 'Red';
+							var heart = document.getElementById(temp[lives]);
+							tree.removeChild(heart)
+							lives++;
+							if (lives == 3){
+								var you_lost = document.createElement('p');
+								you_lost.innerHTML = '-';
+								tree.appendChild(you_lost);
+								lives = 0;
+							}
+						}
+					console.log(lives);
+					}
+				}))	
+
+
+
+		
+			}
+
+
+		function run(){
+			createGrid(x);
+		}
+
+
+
+		run();
+		
+
+		function onButton(){
+			x++;
+			var del = document.getElementById('container');
+			del.querySelectorAll('*').forEach(n => n.remove());
+			run(x);
+			current_arr = pattern(x);
+		}
+
+
+
+	</script>
+
+
+
+</body>
+</html>

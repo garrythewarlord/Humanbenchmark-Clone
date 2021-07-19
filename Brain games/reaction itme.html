@@ -1,0 +1,180 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+
+
+
+</head>
+	
+
+<style type="text/css">
+	
+	.wrapper{
+		width: 100%;
+		overflow: hidden;
+		height: 100%;
+	}
+
+	.wrapper button{
+		font-size: 150%;
+		margin: auto;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-ms-transform: translate(-50%, -50%);
+  		transform: translate(-50%, -50%);
+	}
+
+	.center{
+		width: 50%;
+		text-align: center;
+		margin: auto;
+		padding-top: 10%;
+	}
+
+	#hide_circle{
+		visibility: hidden;
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+
+	#svg-1{
+		margin: 0 auto;
+		display: block;
+	}
+
+	#end{
+		visibility: hidden;
+		width: 50%;
+		text-align: center;
+		margin: auto;
+	}
+
+	#end_2{
+		visibility: hidden;
+		text-align: center;
+		margin: auto;
+		position: relative;
+		top: 50px;
+	}
+
+
+</style>
+
+
+<body>
+
+
+
+	<div class='wrapper'>
+
+
+		<p id='end'>Your reaction time is </p>
+		<button id='end_2' onclick='reset()'>Reset</button>
+
+		<div id='remove'>
+
+		<div class="center">
+		<h1>Instructions</h1>
+		<p>A red circle will appear. Once in turns green, press mouse 1 to record your reaction time. Click <b> Start</b> when ready</p>
+		</div>
+
+		<button onclick="function_name()">START</button>
+
+		</div>
+
+		<div id='hide_circle'>
+
+		<svg id='svg-1' height="100" width="100">
+		  <circle id='circle' cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+		  Sorry, your browser does not support inline SVG.  
+		</svg> 
+
+		</div>
+
+
+	</div>
+
+
+
+	<script type="text/javascript">
+		
+
+
+		function function_name() {
+			var get = document.getElementById("remove");
+			get.remove();
+			calculate();
+		}	
+
+
+		function reset(){
+			location.reload();
+		}
+
+
+
+		function calculate(){
+
+			var enable = document.getElementById("hide_circle").style.visibility = 'visible';
+
+			var min = 5000 - 2000;
+			var max = 9999 - 2000;
+
+
+			document.body.onmousedown = function(e){
+				if(event.button == 0){
+					location.reload();
+				}
+			}
+
+			setTimeout(function(min, max){
+			    var circle = document.getElementById('circle');
+			    circle.setAttribute('fill', 'green');
+			    timeit();
+			}, Math.random() * (max - min) + min);
+
+
+		}
+
+
+		function timeit(){
+
+
+			var startTime = Date.now();
+			var test = true;
+			var interval = setInterval(function() {
+
+			    var elapsedTime = Date.now() - startTime;
+			    console.log(elapsedTime/1000);
+
+			    document.body.onmousedown = function(e){
+			    if(event.button == 0 && test){
+			        clearInterval(interval);
+			        var enable = document.getElementById("hide_circle").style.visibility = 'hidden';
+			        var end = document.getElementById("end");
+			        var reset_button = document.getElementById("end_2").style.visibility = 'visible';
+			        var reaction_time = document.createTextNode((elapsedTime/1000).toString() + " Miliseconds");
+			        end.appendChild(reaction_time);
+			        end.style.padding = "25% 0% 0% 0%";
+			        document.getElementById("end").style.visibility = 'visible';
+			        test = false;
+			    	}
+				}
+
+			});
+
+		}
+
+
+	</script>		
+
+
+
+</body>
+
+
+</html>
